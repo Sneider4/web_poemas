@@ -398,6 +398,11 @@ En un mismo proyecto de Railway:
 2. **+ New → GitHub Repo** apuntando a este repositorio.
    En *Settings → Root Directory* poner `backend`.
    El resto lo lee de `backend/railway.json` (build, arranque y health check).
+
+   > El build corre `npm ci --include=dev` a propósito. Con `NODE_ENV=production`
+   > npm se saltea las devDependencies, y ahí viven TypeScript y `tsx`: sin ese
+   > `--include=dev` el `tsc` no existe y el despliegue falla. La CLI de `prisma`
+   > está en `dependencies` porque se usa en cada arranque, no solo al compilar.
 3. **Volumen para las fotos** — *Service → Settings → Volumes → New Volume*, punto de
    montaje **`/app/uploads`**. Sin esto, cada despliegue borra las fotos subidas.
 4. **Variables** (*Service → Variables*):

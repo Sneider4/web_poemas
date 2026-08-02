@@ -1,0 +1,54 @@
+@import 'styles/paleta';
+
+.pieza {
+  position: relative;
+  overflow: hidden;
+  min-height: 17rem;
+  height: 100%;
+  border-radius: 0.75rem;
+  color: $texto;
+
+  &:hover {
+    text-decoration: none;
+  }
+
+  // El velo se aclara al pasar el mouse: deja ver más el fondo.
+  &:hover .velo {
+    opacity: 0.7;
+  }
+}
+
+.velo {
+  transition: opacity 0.35s ease;
+}
+
+.pieza__texto {
+  z-index: 1;
+}
+
+// El adelanto va siempre visible: sin foto asignada la tarjeta se veía
+// como un rectángulo vacío, y el verso es lo que invita a entrar.
+.pieza__adelanto {
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: $texto;
+  // Tres líneas como máximo: los poemas en prosa envuelven mucho y sin
+  // este tope una tarjeta crecía al triple que sus vecinas.
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.pieza__titulo {
+  font-size: 1.15rem;
+  line-height: 1.2;
+  color: $texto-suave;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .velo {
+    transition: none;
+  }
+}

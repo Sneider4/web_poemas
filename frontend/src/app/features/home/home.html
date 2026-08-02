@@ -1,0 +1,117 @@
+<!-- ============ Hero a pantalla completa ============ -->
+<section class="hero">
+  <!-- La foto va en su propia capa para poder animarla sin arrastrar
+       el texto: así el fondo respira y el verso queda quieto. -->
+  <div class="hero__fondo fondo-foto" [style.background-image]="fondoHero()"></div>
+  <div class="velo"></div>
+
+  <div class="hero__contenido container text-center">
+    <p class="eyebrow mb-4 hero__entra">{{ antetitulo() }}</p>
+
+    <h1
+      class="hero__verso titulo-poetico mb-4 hero__entra hero__entra--2"
+      [innerHTML]="versoDestacado()"
+    ></h1>
+
+    @if (poemaDestacado(); as poema) {
+      <p class="text-body-secondary mb-5 hero__entra hero__entra--3">
+        de <a [routerLink]="['/poemas', poema.slug]" class="fst-italic">{{ poema.title }}</a>
+      </p>
+    }
+
+    <div class="d-flex flex-wrap justify-content-center gap-3 hero__entra hero__entra--4">
+      <a routerLink="/poemas" class="btn btn-primary btn-lg px-4">Leer los poemas</a>
+      <a routerLink="/autor" class="btn btn-outline-light btn-lg px-4">Quién escribe</a>
+    </div>
+  </div>
+
+  <span class="hero__flecha" aria-hidden="true">&#8595;</span>
+</section>
+
+<!-- ============ Manifiesto ============ -->
+<section class="py-5 bg-body-secondary">
+  <div class="container py-4" style="max-width: 46rem" appReveal>
+    <blockquote
+      class="manifiesto titulo-poetico text-center mb-0"
+      [innerHTML]="manifiesto()"
+    ></blockquote>
+
+    @if (notaManifiesto()) {
+      <div class="text-center text-body-secondary mt-4" [innerHTML]="notaManifiesto()"></div>
+    }
+  </div>
+</section>
+
+<!-- ============ Poemas recientes ============ -->
+<section class="container py-5">
+  <div class="d-flex align-items-baseline justify-content-between gap-3 border-bottom pb-3 mb-4">
+    <h2 class="mb-0">Lo más reciente</h2>
+    <a routerLink="/poemas" class="eyebrow text-decoration-none">Ver todos</a>
+  </div>
+
+  @if (destacados().length > 0) {
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+      @for (poema of destacados(); track poema.id; let i = $index) {
+        <!-- Escalonado: cada tarjeta entra un poco después que la anterior. -->
+        <div class="col" appReveal [revealDelay]="i * 110">
+          <app-poem-card [poema]="poema" />
+        </div>
+      }
+    </div>
+  } @else {
+    <app-empty-state
+      titulo="Aún no hay poemas publicados"
+      detalle="Aparecerán acá en cuanto Santiago los publique desde su panel."
+    />
+  }
+</section>
+
+<!-- ============ Comunidad ============ -->
+<section class="py-5 bg-body-secondary">
+  <div class="container py-4">
+    <!-- gy/gx separados: un `g-5` uniforme genera márgenes negativos mayores
+         que el padding del container y desborda la página en móvil. -->
+    <div class="row align-items-center gy-5 gx-4">
+      <div class="col-lg-5" appReveal>
+        <h2 class="mb-3">La comunidad</h2>
+        <p class="text-body-secondary">
+          &laquo;&iquest;Qué sería de la vida del poeta, sin alguien que lo lea?&raquo;
+        </p>
+        <p class="text-body-secondary">
+          Dejá tu poema, tu opinión o la música que te acompaña. No hace falta registrarse.
+        </p>
+        <!-- Este invita a escribir; el del difuminado, a seguir leyendo. -->
+        <a routerLink="/comunidad" class="btn btn-outline-light mt-2">Dejar mi publicación</a>
+      </div>
+
+      <div class="col-lg-7" appReveal [revealDelay]="140">
+        @if (ultimasPublicaciones().length > 0) {
+          <!-- Altura tope: sin esto una publicación larga estira la portada
+               entera. Lo que sobra se desvanece e invita a entrar al tablero. -->
+          <div class="vistazo">
+            <div class="d-flex flex-column gap-3">
+              @for (post of ultimasPublicaciones(); track post.id) {
+                <article class="card">
+                  <div class="card-body">
+                    <div class="texto-poema mb-2" [innerHTML]="post.content"></div>
+                    <span class="eyebrow">{{ post.authorName }}</span>
+                  </div>
+                </article>
+              }
+            </div>
+
+            <div class="vistazo__difuminado">
+              <a routerLink="/comunidad" class="btn btn-primary btn-sm">
+                Ver todo el tablero
+              </a>
+            </div>
+          </div>
+        } @else {
+          <p class="text-body-secondary fst-italic">
+            El tablero está esperando su primera publicación.
+          </p>
+        }
+      </div>
+    </div>
+  </div>
+</section>

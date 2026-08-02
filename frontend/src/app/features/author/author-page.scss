@@ -1,0 +1,21 @@
+@import 'styles/paleta';
+
+.retrato {
+  width: 100%;
+  max-width: 15rem;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  border-radius: 0.75rem;
+}
+
+// Mientras no haya foto, un marco con la inicial: se ve intencional
+// en vez de dejar un hueco o una imagen rota.
+.retrato--vacio {
+  background: linear-gradient(150deg, $superficie 0%, $borde 100%);
+  margin-inline: auto;
+
+  span {
+    font-size: 5rem;
+    color: $texto-suave;
+  }
+}

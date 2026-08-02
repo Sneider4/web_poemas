@@ -1,0 +1,138 @@
+// Cabecera con la foto del poema y el título encima.
+.cabecera {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  min-height: 22rem;
+  padding: 5rem 0 3rem;
+}
+
+.cabecera__contenido {
+  position: relative; // por encima del velo
+  z-index: 1;
+}
+
+.cabecera h1 {
+  font-size: clamp(2rem, 5vw, 3.25rem);
+  text-wrap: balance;
+}
+
+// Entrada del título y la fecha al abrir el poema.
+.cabecera__entra {
+  animation: entrar-suave 0.8s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+.cabecera__entra--2 {
+  animation-delay: 0.18s;
+}
+
+// Separación entre estrofas: reemplaza la línea en blanco que antes
+// venía dentro del propio texto.
+.estrofa {
+  margin-bottom: 1.75rem;
+
+  &:last-of-type {
+    margin-bottom: 0;
+  }
+}
+
+// --- Seguir leyendo ---
+// Cada poema se presenta con su miniatura y sus primeros versos: así la
+// tarjeta muestra contenido en vez de quedar como una caja vacía.
+.seguir {
+  max-width: 56rem;
+}
+
+.salto {
+  color: var(--bs-body-color);
+  text-decoration: none;
+  transition:
+    border-color 0.3s ease,
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+
+  &:hover {
+    text-decoration: none;
+    border-color: var(--bs-body-color);
+    transform: translateY(-3px);
+    box-shadow: 0 10px 26px rgba(0, 0, 0, 0.4);
+  }
+}
+
+.salto__miniatura {
+  flex-shrink: 0;
+  width: 4.5rem;
+  height: 4.5rem;
+  border-radius: 0.5rem;
+}
+
+// El poema siguiente se alinea a la derecha, en espejo del anterior.
+.salto--proximo {
+  text-align: end;
+}
+
+.salto__guia {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.salto--proximo .salto__guia {
+  justify-content: flex-end;
+}
+
+.salto__titulo {
+  font-size: 1.25rem;
+  line-height: 1.25;
+  // Un título largo se recorta en vez de descuadrar la tarjeta.
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+// Necesario para que el recorte funcione dentro de un contenedor flex.
+.min-w-0 {
+  min-width: 0;
+}
+
+.salto__versos {
+  font-size: 0.95rem;
+  color: var(--bs-secondary-color);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+// La flecha se desplaza hacia su lado al pasar el mouse.
+.salto__flecha {
+  display: inline-block;
+  transition: transform 0.35s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+.salto:hover .salto__flecha {
+  transform: translateX(-0.35rem);
+}
+
+.salto--proximo:hover .salto__flecha {
+  transform: translateX(0.35rem);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cabecera__entra {
+    animation: none;
+  }
+
+  .salto,
+  .salto__flecha {
+    transition: none;
+  }
+
+  .salto:hover {
+    transform: none;
+  }
+}

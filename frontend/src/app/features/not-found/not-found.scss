@@ -1,0 +1,18 @@
+@import 'styles/paleta';
+
+.no-encontrado {
+  // Centra el bloque cuando el contenido es corto, sin depender del alto
+  // exacto del header ni del footer.
+  min-height: 60vh;
+  display: grid;
+  align-content: center;
+}
+
+.no-encontrado__numero {
+  font-family: var(--bs-font-serif, Georgia, serif);
+  font-size: clamp(4rem, 18vw, 9rem);
+  line-height: 1;
+  letter-spacing: 0.1em;
+  color: $borde; // decorativo: no aporta informacion que no este en el titulo
+  user-select: none;
+}

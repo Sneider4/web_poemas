@@ -1,0 +1,23 @@
+<div class="d-flex flex-column align-items-center gap-3">
+  <span class="eyebrow">Compartir</span>
+
+  <div class="d-flex flex-wrap justify-content-center gap-2">
+    <button type="button" class="btn btn-outline-light btn-sm" (click)="copiarEnlace()">
+      {{ copiado() ? '✓ Enlace copiado' : 'Copiar enlace' }}
+    </button>
+
+    <button type="button" class="btn btn-outline-light btn-sm" (click)="abrirImagen()">
+      Crear imagen
+    </button>
+
+    @if (puedeCompartirNativo) {
+      <button type="button" class="btn btn-outline-light btn-sm" (click)="compartirNativo()">
+        Compartir
+      </button>
+    }
+  </div>
+
+  @if (error()) {
+    <p class="small text-danger mb-0" role="alert">{{ error() }}</p>
+  }
+</div>

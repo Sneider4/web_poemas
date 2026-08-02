@@ -1,0 +1,9 @@
+<div class="text-center border border-dashed rounded-3 bg-body-tertiary py-5 px-4">
+  <p class="titulo-poetico fs-5 text-body-secondary mb-2">{{ titulo() }}</p>
+
+  @if (detalle()) {
+    <p class="text-body-tertiary mb-0">{{ detalle() }}</p>
+  }
+
+  <ng-content />
+</div>

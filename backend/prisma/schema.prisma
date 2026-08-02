@@ -1,0 +1,119 @@
+// Esquema de la base de datos del sitio de poesia de Santiago.
+// Local: PostgreSQL 17. Produccion: Neon (misma cadena, con ?sslmode=require).
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+/// Unico usuario administrador (Santiago). Se siembra con `npm run db:seed`;
+/// no existe endpoint publico de registro a proposito.
+model AdminUser {
+  id           String   @id @default(uuid())
+  /// Nombre de usuario para entrar al panel. Se guarda en minusculas.
+  username     String   @unique
+  passwordHash String
+  /// Hash del codigo de recuperacion. Se guarda cifrado igual que la
+  /// contrasena: en texto plano solo existe cuando se muestra una vez.
+  /// Null significa que no hay codigo activo (nunca se genero o ya se uso).
+  recoveryCodeHash String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@map("admin_users")
+}
+
+/// Fila unica (id = 1) con los datos de la pagina "Autor".
+/// Fila unica (id = 1) con los datos del autor y los textos editables
+/// de la portada. Todo lo que Santiago pueda querer cambiar vive aca;
+/// los titulos de seccion y las etiquetas de navegacion siguen en las
+/// plantillas porque son estructura del sitio, no contenido suyo.
+model Author {
+  id        Int      @id @default(1)
+  name      String   @default("Santiago")
+  tagline   String   @default("")
+  bio       String
+  instagram String   @default("")
+  /// Foto del autor. Ruta devuelta al subirla desde el panel
+  /// (ej: "/uploads/autor/xxx.jpg").
+  photo     String   @default("")
+
+  // --- Portada ---
+  /// Imagen de fondo del hero (ej: "/uploads/portada/xxx.jpg").
+  heroImage    String @default("")
+  /// Antetitulo del hero, encima del verso grande.
+  heroEyebrow  String @default("Santiago a secas")
+  /// Verso grande del hero. Si queda vacio se toman los primeros versos
+  /// del poema destacado, que es el comportamiento por defecto.
+  heroVerse    String @default("")
+  /// Frase grande de la segunda seccion.
+  manifesto    String @default("")
+  /// Parrafo debajo de la frase.
+  manifestoNote String @default("")
+
+  updatedAt DateTime @updatedAt
+
+  @@map("author")
+}
+
+model Poem {
+  id          String   @id @default(uuid())
+  title       String
+  slug        String   @unique
+  body        String   @default("")
+  /// Imagen de portada del poema, subida desde el panel
+  /// (ej: "/uploads/poemas/xxx.jpg"). Vacio = degradado de respaldo.
+  coverImage  String   @default("")
+  published   Boolean  @default(false)
+  featured    Boolean  @default(false)
+  /// Orden manual en el indice de poemas: menor valor aparece primero.
+  sortOrder   Int      @default(0)
+  publishedAt DateTime @default(now())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([published, sortOrder])
+  @@map("poems")
+}
+
+enum CommunityPostType {
+  POEM
+  OPINION
+  MUSIC
+}
+
+/// Publicacion del tablero de la comunidad. Sin cuentas de usuario:
+/// cualquiera publica dejando un nombre libre.
+model CommunityPost {
+  id         String            @id @default(uuid())
+  authorName String
+  type       CommunityPostType
+  content    String
+  /// Moderacion: ocultar en vez de borrar permite revertir.
+  hidden     Boolean           @default(false)
+  createdAt  DateTime          @default(now())
+
+  ratings CommunityRating[]
+
+  @@index([hidden, createdAt])
+  @@map("community_posts")
+}
+
+/// Una calificacion por visitante y publicacion.
+/// `raterHash` es sha256(ip + RATING_SALT): no guardamos la IP en claro.
+model CommunityRating {
+  id        String   @id @default(uuid())
+  postId    String
+  raterHash String
+  createdAt DateTime @default(now())
+
+  post CommunityPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@unique([postId, raterHash])
+  @@index([postId])
+  @@map("community_ratings")
+}

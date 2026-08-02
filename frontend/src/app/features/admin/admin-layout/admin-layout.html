@@ -1,0 +1,31 @@
+<div class="d-flex flex-column flex-md-row min-vh-100">
+  <aside class="d-flex flex-column gap-4 p-4 bg-body-secondary border-end panel-lateral">
+    <div class="d-flex flex-column lh-sm">
+      <span class="titulo-poetico fs-4">Panel</span>
+      <span class="eyebrow">santiago a secas</span>
+    </div>
+
+    <nav class="nav nav-pills flex-md-column gap-1" aria-label="Secciones del panel">
+      @for (seccion of secciones; track seccion.ruta) {
+        <a [routerLink]="seccion.ruta" routerLinkActive="active" class="nav-link">
+          {{ seccion.etiqueta }}
+        </a>
+      }
+    </nav>
+
+    <div class="d-flex flex-column gap-2 mt-md-auto pt-4 border-top small">
+      @if (admin(); as datos) {
+        <span class="text-body-tertiary text-break">{{ datos.username }}</span>
+      }
+
+      <a routerLink="/" class="text-body-secondary">Ver el sitio</a>
+      <button type="button" class="btn btn-link btn-sm text-danger p-0 text-start" (click)="salir()">
+        Cerrar sesión
+      </button>
+    </div>
+  </aside>
+
+  <main class="flex-grow-1 p-4 overflow-auto">
+    <router-outlet />
+  </main>
+</div>

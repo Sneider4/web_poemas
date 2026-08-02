@@ -1,0 +1,99 @@
+<header class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+  <h1 class="fs-3 mb-0">{{ editando() ? 'Editar poema' : 'Nuevo poema' }}</h1>
+  <a routerLink="/admin/poemas" class="btn btn-outline-secondary">Volver</a>
+</header>
+
+
+@if (cargando()) {
+  <app-loading-spinner mensaje="Cargando el poema" />
+} @else {
+  <!-- Dos columnas en pantallas grandes: el poema ocupa el espacio principal
+       y los ajustes quedan al costado, a la vista mientras se escribe. -->
+  <form [formGroup]="formulario" (ngSubmit)="guardar()">
+    <div class="row g-4">
+      <div class="col-12 col-xl-8">
+        <div class="mb-3">
+          <label class="form-label" for="titulo">Título</label>
+          <input
+            id="titulo"
+            class="form-control form-control-lg"
+            [class.is-invalid]="formulario.controls.title.touched && formulario.controls.title.invalid"
+            type="text"
+            formControlName="title"
+            maxlength="200"
+            placeholder="Por ejemplo: desde el jardín"
+          />
+          <div class="invalid-feedback">El título es obligatorio.</div>
+          <div class="form-text">La dirección del poema se genera sola a partir del título.</div>
+        </div>
+
+        <app-rich-text
+          formControlName="body"
+          etiqueta="El poema"
+          alto="28rem"
+          claseTexto="texto-poema fs-5"
+          placeholder="Escribí acá tu poema. Los saltos de línea se respetan tal cual."
+          ayuda="Podés usar negrita y cursiva. En la imagen para compartir el poema se dibuja sin formato."
+        />
+      </div>
+
+      <div class="col-12 col-xl-4">
+        <div class="card mb-4">
+          <div class="card-body pb-0">
+            <app-image-upload
+              [(valor)]="portada"
+              categoria="poemas"
+              etiqueta="Imagen del poema"
+              forma="ancha"
+              [respaldo]="degradado()"
+              ayuda="Horizontal, 1200 × 800 px o más. Se ve en la galería de poemas y como
+                     cabecera al abrirlo, con el título encima: conviene que el centro quede
+                     despejado. JPG, PNG o WebP, hasta 5 MB. Si no subís ninguna, el poema
+                     muestra un degradado propio."
+            />
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-body d-flex flex-column gap-3">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="publicado" formControlName="published" />
+              <label class="form-check-label" for="publicado">
+                <strong>Publicado</strong>
+                <span class="d-block small text-body-secondary">
+                  Visible para cualquiera que entre al sitio.
+                </span>
+              </label>
+            </div>
+
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="destacado" formControlName="featured" />
+              <label class="form-check-label" for="destacado">
+                <strong>Destacado</strong>
+                <span class="d-block small text-body-secondary">
+                  Aparece entre los recientes de la portada.
+                </span>
+              </label>
+            </div>
+
+            <div style="max-width: 8rem">
+              <label class="form-label" for="orden">Orden</label>
+              <input id="orden" class="form-control" type="number" formControlName="sortOrder" />
+              <div class="form-text">Menor número aparece primero.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="d-flex justify-content-end gap-3 mt-4">
+      <a routerLink="/admin/poemas" class="btn btn-outline-secondary">Cancelar</a>
+      <button type="submit" class="btn btn-primary" [disabled]="guardando()">
+        @if (guardando()) {
+          <span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
+        }
+        {{ guardando() ? 'Guardando...' : 'Guardar' }}
+      </button>
+    </div>
+  </form>
+}

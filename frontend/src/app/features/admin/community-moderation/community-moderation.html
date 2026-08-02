@@ -1,0 +1,49 @@
+<header class="mb-4">
+  <h1 class="fs-3 mb-0">Comunidad</h1>
+  <p class="small text-body-tertiary mb-0">
+    Ocultá lo que no quieras mostrar. Ocultar es reversible; eliminar no.
+  </p>
+</header>
+
+@if (cargando() && publicaciones().length === 0) {
+  <app-loading-spinner mensaje="Cargando publicaciones" />
+} @else {
+  <div class="d-flex flex-column gap-3">
+    @for (post of publicaciones(); track post.id) {
+      <article class="card" [class.opacity-75]="post.hidden">
+        <div class="card-body">
+          <div class="d-flex flex-wrap align-items-center gap-3 mb-3 small text-body-tertiary">
+            <span class="fs-6 text-body-emphasis">{{ post.authorName }}</span>
+            <span class="badge rounded-pill bg-body-secondary text-body-secondary text-uppercase">
+              {{ etiquetaTipo(post) }}
+            </span>
+            <time [attr.datetime]="post.createdAt">
+              {{ post.createdAt | date: 'd MMM y, HH:mm' }}
+            </time>
+            <span>{{ post.ratingCount }} me gusta</span>
+            @if (post.hidden) {
+              <span class="badge text-bg-danger">Oculta</span>
+            }
+          </div>
+
+          <div class="texto-poema mb-3" [innerHTML]="post.content"></div>
+
+          <div class="d-flex gap-3">
+            <button
+              type="button"
+              class="btn btn-outline-secondary btn-sm"
+              (click)="alternarVisibilidad(post)"
+            >
+              {{ post.hidden ? 'Mostrar' : 'Ocultar' }}
+            </button>
+            <button type="button" class="btn btn-outline-danger btn-sm" (click)="eliminar(post)">
+              Eliminar
+            </button>
+          </div>
+        </div>
+      </article>
+    } @empty {
+      <p class="text-body-tertiary">Todavía nadie publicó en la comunidad.</p>
+    }
+  </div>
+}

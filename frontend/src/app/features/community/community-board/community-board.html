@@ -1,0 +1,57 @@
+<div class="container py-5">
+  <header class="border-bottom pb-4 mb-4">
+    <h1 class="titulo-poetico mb-2">Comunidad</h1>
+    <p class="text-body-secondary mb-2" style="max-width: 42rem">
+      Publicá un poema, tu opinión sobre lo que leíste o la música que te acompaña.
+      También podés calificar lo que escribieron los demás.
+    </p>
+    <p class="small text-body-secondary mb-0">
+      Tocá el botón <strong>+</strong> o hacé doble clic en el tablero para publicar.
+    </p>
+  </header>
+
+  @if (error()) {
+    <div class="alert alert-danger" role="alert">{{ error() }}</div>
+  }
+
+  @if (cargando() && publicaciones().length === 0) {
+    <app-loading-spinner mensaje="Cargando publicaciones" />
+  } @else if (publicaciones().length > 0) {
+    <!-- El doble clic se escucha en el contenedor; las tarjetas quedan
+         excluidas comparando el target dentro del manejador. -->
+    <div
+      class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-4 tablero"
+      (dblclick)="alDobleClic($event)"
+    >
+      @for (post of publicaciones(); track post.id) {
+        <div class="col">
+          <app-community-post-card
+            [post]="post"
+            [yaCalifico]="yaCalifico(post.id)"
+            (calificar)="calificar($event)"
+          />
+        </div>
+      }
+    </div>
+  } @else {
+    <div class="tablero" (dblclick)="alDobleClic($event)">
+      <app-empty-state
+        titulo="El tablero está vacío"
+        detalle="Sé la primera persona en dejar algo acá."
+      >
+        <button type="button" class="btn btn-primary mt-3" (click)="abrirFormulario()">
+          Escribir la primera publicación
+        </button>
+      </app-empty-state>
+    </div>
+  }
+</div>
+
+<button
+  type="button"
+  class="btn btn-primary rounded-circle shadow position-fixed d-flex align-items-center justify-content-center flotante"
+  aria-label="Crear una publicación"
+  (click)="abrirFormulario()"
+>
+  <span aria-hidden="true" class="fs-3 lh-1">+</span>
+</button>

@@ -1,0 +1,124 @@
+<header class="mb-4">
+  <h1 class="fs-3 mb-0">Seguridad</h1>
+  <p class="small text-body-secondary mb-0">
+    Tu contraseña y el código para recuperar el acceso si la olvidás.
+  </p>
+</header>
+
+<div class="row g-4">
+  <!-- ===== Cambiar contraseña ===== -->
+  <div class="col-12 col-xl-6">
+    <div class="card h-100">
+      <div class="card-body">
+        <h2 class="fs-5 border-bottom pb-2 mb-3">Cambiar la contraseña</h2>
+
+        <form [formGroup]="formulario" (ngSubmit)="cambiarPassword()">
+          <div class="mb-3">
+            <label class="form-label" for="actual">Contraseña actual</label>
+            <input
+              id="actual"
+              class="form-control"
+              type="password"
+              formControlName="passwordActual"
+              autocomplete="current-password"
+            />
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label" for="nueva">Contraseña nueva</label>
+            <input
+              id="nueva"
+              class="form-control"
+              [class.is-invalid]="
+                formulario.controls.passwordNueva.touched &&
+                formulario.controls.passwordNueva.invalid
+              "
+              type="password"
+              formControlName="passwordNueva"
+              autocomplete="new-password"
+            />
+            <div class="invalid-feedback">Tiene que tener al menos 8 caracteres.</div>
+            <div class="form-text">
+              Mientras más larga, mejor. Evitá tu nombre o algo fácil de adivinar.
+            </div>
+          </div>
+
+          <div class="mb-4">
+            <label class="form-label" for="repetir">Repetir la nueva</label>
+            <input
+              id="repetir"
+              class="form-control"
+              type="password"
+              formControlName="repetir"
+              autocomplete="new-password"
+            />
+          </div>
+
+          <div class="d-flex justify-content-end">
+            <button type="submit" class="btn btn-primary" [disabled]="guardando()">
+              @if (guardando()) {
+                <span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
+              }
+              {{ guardando() ? 'Cambiando...' : 'Cambiar contraseña' }}
+            </button>
+          </div>
+
+          <p class="small text-body-tertiary mt-3 mb-0">
+            Al cambiarla se cierra la sesión y tenés que entrar de nuevo.
+          </p>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Código de recuperación ===== -->
+  <div class="col-12 col-xl-6">
+    <div class="card h-100">
+      <div class="card-body">
+        <h2 class="fs-5 border-bottom pb-2 mb-3">Código de recuperación</h2>
+
+        @if (codigoNuevo(); as codigo) {
+          <!-- Se muestra una sola vez: después solo queda su huella cifrada. -->
+          <div class="alert alert-warning">
+            <strong>Guardalo ahora.</strong> No vas a poder volver a verlo. Si lo perdés,
+            tendrás que generar otro desde acá (con la sesión abierta).
+          </div>
+
+          <p class="codigo text-center mb-3">{{ codigo }}</p>
+
+          <div class="d-flex flex-wrap justify-content-center gap-2">
+            <button type="button" class="btn btn-primary btn-sm" (click)="copiarCodigo()">
+              {{ copiado() ? '✓ Copiado' : 'Copiar código' }}
+            </button>
+            <button type="button" class="btn btn-outline-secondary btn-sm" (click)="ocultarCodigo()">
+              Ya lo guardé
+            </button>
+          </div>
+        } @else {
+          <p class="text-body-secondary">
+            Sirve para volver a entrar si olvidás la contraseña. Es de
+            <strong>un solo uso</strong>: al usarlo queda invalidado y hay que generar otro.
+          </p>
+
+          @if (admin()?.tieneCodigoRecuperacion) {
+            <p class="small text-body-tertiary">
+              Ya tenés uno activo. Si generás otro, <strong>el anterior deja de servir</strong>.
+            </p>
+          } @else {
+            <div class="alert alert-warning small">
+              No tenés ningún código activo. Si olvidás la contraseña ahora, no vas a poder
+              entrar sin ayuda del desarrollador.
+            </div>
+          }
+
+          <button type="button" class="btn btn-outline-light" [disabled]="generando()" (click)="generarCodigo()">
+            @if (generando()) {
+              <span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
+            }
+            {{ admin()?.tieneCodigoRecuperacion ? 'Generar uno nuevo' : 'Generar código' }}
+          </button>
+        }
+      </div>
+    </div>
+  </div>
+</div>

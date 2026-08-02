@@ -1,0 +1,56 @@
+<footer class="mt-5 pt-5 border-top bg-body-secondary">
+  <div class="container text-center">
+    <p class="titulo-poetico fs-5 text-body-secondary mx-auto mb-3" style="max-width: 32rem">
+      &laquo;&iquest;Qué sería de la vida del poeta, sin alguien que lo lea?&raquo;
+    </p>
+
+    <div class="d-flex flex-wrap justify-content-center gap-3 small text-body-secondary mb-4">
+      <span>&copy; {{ anio }} {{ autor()?.name || 'Santiago' }}. Todos los poemas son de su autoría.</span>
+
+      @if (autor(); as datos) {
+        @if (datos.instagram) {
+          <a
+            [href]="'https://instagram.com/' + datos.instagram"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            &#64;{{ datos.instagram }}
+          </a>
+        }
+      }
+    </div>
+  </div>
+
+  <!-- Créditos del desarrollador -->
+  <div class="border-top">
+    <div class="container py-4">
+      <div class="d-flex flex-wrap justify-content-center align-items-center gap-2 gap-md-3 small">
+        <span class="text-body-secondary">Sitio desarrollado por</span>
+
+        <a
+          [href]="desarrollador.portafolio"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="fw-medium"
+        >
+          {{ desarrollador.nombre }}
+        </a>
+
+        <span class="text-body-secondary d-none d-md-inline" aria-hidden="true">&middot;</span>
+        <span class="text-body-secondary">{{ desarrollador.rol }}</span>
+
+        <span class="w-100 d-md-none"></span>
+
+        <span class="d-flex gap-3">
+          @for (enlace of desarrollador.enlaces; track enlace.url) {
+            <a [href]="enlace.url" target="_blank" rel="noopener noreferrer">{{ enlace.etiqueta }}</a>
+          }
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div class="container pb-4 text-center">
+    <a routerLink="/admin/login" class="eyebrow text-decoration-none">Administrar</a>
+  </div>
+</footer>

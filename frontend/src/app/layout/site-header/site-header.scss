@@ -1,0 +1,38 @@
+@import 'styles/paleta';
+
+// El sticky tiene que ir en el elemento del componente, no en el <nav>
+// de adentro: el host mide exactamente lo mismo que el nav, así que el
+// nav no tenía margen para fijarse y se iba con el scroll.
+:host {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+
+// Bootstrap resuelve la estructura del navbar; acá solo el vidrio
+// esmerilado del fondo y el subrayado del enlace activo, que no
+// vienen de serie.
+.cabecera {
+  background-color: rgba($papel, 0.92);
+  backdrop-filter: blur(8px);
+}
+
+.nav-link.active {
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset-inline: 0.5rem;
+    bottom: 0.15rem;
+    height: 1px;
+    background-color: $vino;
+  }
+}
+
+// En el menú desplegado del móvil el subrayado sobra.
+@media (width < 768px) {
+  .nav-link.active::after {
+    display: none;
+  }
+}

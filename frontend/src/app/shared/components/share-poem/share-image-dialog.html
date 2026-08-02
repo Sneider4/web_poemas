@@ -1,0 +1,104 @@
+<div class="card shadow-lg">
+  <div class="card-header d-flex justify-content-between align-items-start gap-3 bg-body-tertiary">
+    <div>
+      <h2 class="fs-5 mb-1">Imagen para compartir</h2>
+      <p class="small text-body-secondary mb-0">
+        @if (sePuedeMover()) {
+          Arrastrá dentro del recuadro para elegir qué parte del poema se muestra.
+        } @else {
+          El poema entra completo.
+        }
+      </p>
+    </div>
+    <button type="button" class="btn-close" aria-label="Cerrar" (click)="cerrar()"></button>
+  </div>
+
+  <div class="card-body">
+    <!-- Formato -->
+    <div class="btn-group w-100 mb-3" role="group" aria-label="Formato de la imagen">
+      @for (opcion of formatos; track opcion.valor) {
+        <button
+          type="button"
+          class="btn btn-sm"
+          [class]="formato() === opcion.valor ? 'btn-primary' : 'btn-outline-secondary'"
+          (click)="cambiarFormato(opcion.valor)"
+        >
+          {{ opcion.etiqueta }}
+          <span class="d-none d-sm-inline opacity-75">· {{ opcion.proporcion }}</span>
+        </button>
+      }
+    </div>
+
+    <!-- Vista previa: es la superficie que se arrastra -->
+    <div
+      class="previa"
+      [class.previa--movible]="sePuedeMover()"
+      [style.aspect-ratio]="proporcion"
+      (pointerdown)="alPresionar($event)"
+      (pointermove)="alMover($event)"
+      (pointerup)="alSoltar($event)"
+      (pointercancel)="alSoltar($event)"
+      (wheel)="alRodar($event)"
+    >
+      @if (vistaPrevia(); as url) {
+        <img
+          [src]="url"
+          alt="Vista previa de la imagen del poema"
+          class="previa__imagen"
+          draggable="false"
+        />
+      }
+
+      @if (generando() && !vistaPrevia()) {
+        <div class="previa__capa">
+          <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+          <span class="visually-hidden">Generando la imagen</span>
+        </div>
+      }
+
+      @if (sePuedeMover()) {
+        <span class="previa__pista" aria-hidden="true">↕ arrastrá</span>
+      }
+    </div>
+
+    <!-- Control deslizante: alternativa al arrastre, y necesario con teclado -->
+    @if (sePuedeMover()) {
+      <div class="d-flex align-items-center gap-3 mt-3">
+        <input
+          type="range"
+          class="form-range flex-grow-1"
+          min="0"
+          max="100"
+          step="1"
+          [value]="avance()"
+          aria-label="Parte del poema que se muestra"
+          (input)="alDeslizar($event)"
+        />
+        <button
+          type="button"
+          class="btn btn-link btn-sm p-0 text-nowrap"
+          [disabled]="desplazamiento() === 0"
+          (click)="volverAlInicio()"
+        >
+          Al principio
+        </button>
+      </div>
+    }
+
+    @if (error()) {
+      <p class="text-danger small mt-3 mb-0" role="alert">{{ error() }}</p>
+    }
+  </div>
+
+  <div class="card-footer d-flex justify-content-end gap-2 bg-body-tertiary">
+    <button type="button" class="btn btn-outline-secondary" (click)="cerrar()">Cancelar</button>
+    <button
+      type="button"
+      class="btn btn-primary"
+      [disabled]="!vistaPrevia()"
+      (click)="descargar()"
+    >
+      Descargar
+    </button>
+  </div>
+</div>

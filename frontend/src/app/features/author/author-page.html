@@ -1,0 +1,47 @@
+<div class="container py-5">
+  @if (cargando() && !autor()) {
+    <app-loading-spinner mensaje="Cargando" />
+  } @else if (autor(); as datos) {
+    <div class="row justify-content-center gy-5 gx-4">
+      <!-- Retrato: si todavía no hay foto, un marco con la inicial. -->
+      <div class="col-md-4 col-lg-3 text-center">
+        @if (datos.photo) {
+          <img
+            [src]="urlFoto(datos.photo)"
+            [alt]="'Retrato de ' + datos.name"
+            class="retrato img-fluid"
+          />
+        } @else {
+          <div class="retrato retrato--vacio d-flex align-items-center justify-content-center">
+            <span class="titulo-poetico">{{ datos.name.charAt(0) }}</span>
+          </div>
+        }
+      </div>
+
+      <div class="col-md-8 col-lg-6">
+        <header class="mb-4">
+          <h1 class="titulo-poetico mb-2">{{ datos.name }}</h1>
+
+          @if (datos.tagline) {
+            <p class="eyebrow mb-0">{{ datos.tagline }}</p>
+          }
+        </header>
+
+        <div class="texto-poema fs-5 lh-lg" [innerHTML]="datos.bio"></div>
+
+        @if (datos.instagram) {
+          <div class="mt-5 pt-4 border-top">
+            <a
+              [href]="'https://instagram.com/' + datos.instagram"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="btn btn-outline-light"
+            >
+              Seguime en Instagram &#64;{{ datos.instagram }}
+            </a>
+          </div>
+        }
+      </div>
+    </div>
+  }
+</div>

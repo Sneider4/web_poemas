@@ -1,0 +1,35 @@
+@import 'styles/paleta';
+
+// La vista previa imita la proporción con la que se verá la imagen en el
+// sitio, para que se note si el encuadre no funciona.
+.vista-previa {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 11rem;
+  aspect-ratio: 3 / 2;
+  flex-shrink: 0;
+  border: 1px solid $borde;
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.vista-previa--vertical {
+  width: 7.5rem;
+  aspect-ratio: 3 / 4;
+}
+
+.vista-previa__vacia {
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: $texto-tenue;
+}
+
+.vista-previa__capa {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background-color: rgba($charcoal-noir, 0.7);
+}

@@ -1,0 +1,69 @@
+// ============================================================
+//  Paleta del sitio: monocromática, base oscura.
+//  Las fotos aportan el único color de la página.
+//
+//  Estos valores alimentan las variables de Bootstrap en
+//  styles.scss, así que cambiando acá cambia todo el sitio.
+// ============================================================
+
+// --- Los cinco tonos de la paleta ---
+$charcoal-noir: #2b2b2b;
+$ironclad-grey: #565656;
+$urban-fog: #848484;
+$moonlit-silver: #b3b3b3;
+$cloud-veil: #e0e0e0;
+
+// --- Tonos derivados ---
+// El fondo es plano, así que hacen falta dos variantes para separar
+// superficies sin salirse de la paleta.
+$carbon-hundido: #1f1f1f; // franjas y secciones que se hunden
+$carbon-elevado: #333333; // tarjetas y campos, apenas sobre el fondo
+
+// ============================================================
+//  Contraste sobre el fondo #2B2B2B. Respetar estos límites es
+//  lo que evita que el diseño quede bonito pero ilegible:
+//
+//    #E0E0E0  10.9:1  texto principal y títulos
+//    #B3B3B3   6.9:1  texto secundario, fechas, ayudas
+//    #848484   3.7:1  SOLO texto grande (>=18pt) o decorativo
+//    #565656   1.6:1  SOLO bordes y separadores, nunca texto
+// ============================================================
+
+// --- Roles semánticos (los nombres que usan los componentes) ---
+$fondo: $charcoal-noir;
+$fondo-hundido: $carbon-hundido;
+$superficie: $carbon-elevado;
+$superficie-alt: $ironclad-grey;
+
+$texto: $cloud-veil;
+$texto-suave: $moonlit-silver;
+$texto-tenue: $urban-fog; // solo texto grande o decorativo
+$titulo: $cloud-veil;
+
+$acento: $cloud-veil; // sobre fondo oscuro, lo que resalta es lo claro
+$acento-fuerte: #ffffff;
+$borde: $ironclad-grey;
+
+// --- Estados ---
+// Sin color en la paleta: se diferencian por luminosidad y contexto.
+$peligro: #d98b84;
+$exito: #a8c3ae;
+$aviso: #d6c08f;
+
+// --- Tipografía ---
+$fuente-titulo: Georgia, 'Times New Roman', serif;
+$fuente-cuerpo: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+$fuente-poema: Georgia, 'Times New Roman', serif;
+
+// --- Alias conservados ---
+// Los .scss de componentes ya escritos usan estos nombres; se mantienen
+// apuntando a los roles nuevos para no tener que tocarlos.
+$vino: $acento;
+$vino-oscuro: $acento-fuerte;
+$tinta: $texto;
+$tinta-fuerte: $titulo;
+$tinta-suave: $texto-suave;
+$tinta-tenue: $texto-tenue;
+$papel: $fondo;
+$papel-claro: $superficie;
+$papel-oscuro: $fondo-hundido;

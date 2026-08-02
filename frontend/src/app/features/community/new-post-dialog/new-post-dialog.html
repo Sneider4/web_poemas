@@ -1,0 +1,72 @@
+<!-- El CDK Dialog aporta el overlay, el foco atrapado y el cierre con ESC.
+     Se usa `card` y no `modal-content` porque Bootstrap define las variables
+     --bs-modal-* en el contenedor `.modal`, que el CDK no monta: fuera de esa
+     jerarquía `.modal-content` quedaría sin fondo ni bordes. -->
+<form class="card shadow-lg" [formGroup]="formulario" (ngSubmit)="enviar()">
+  <div class="card-header d-flex justify-content-between align-items-start gap-3 bg-body-tertiary">
+    <div>
+      <h2 class="fs-5 mb-1">Publicar en la comunidad</h2>
+      <p class="small text-body-tertiary mb-0">
+        Compartí un poema, tu opinión sobre lo que leíste, o la música que te acompaña.
+      </p>
+    </div>
+    <button type="button" class="btn-close" aria-label="Cerrar" (click)="cancelar()"></button>
+  </div>
+
+  <div class="card-body">
+    <div class="mb-3">
+      <label class="form-label" for="nombre">Tu nombre</label>
+      <input
+        id="nombre"
+        class="form-control"
+        [class.is-invalid]="formulario.controls.authorName.touched && formulario.controls.authorName.invalid"
+        type="text"
+        formControlName="authorName"
+        [maxlength]="limites.nombre"
+        placeholder="Como querés que te lean"
+        autocomplete="nickname"
+      />
+      <div class="invalid-feedback">
+        Escribí un nombre (máximo {{ limites.nombre }} caracteres).
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label" for="tipo">¿Qué querés compartir?</label>
+      <select id="tipo" class="form-select" formControlName="type">
+        @for (tipo of tipos; track tipo.value) {
+          <option [value]="tipo.value">{{ tipo.label }}</option>
+        }
+      </select>
+    </div>
+
+    <app-rich-text
+      formControlName="content"
+      etiqueta="Tu publicación"
+      alto="9rem"
+      claseTexto="texto-poema"
+      placeholder="Escribí acá..."
+    />
+
+    <p class="form-text text-end mt-0" [class.text-danger]="restantes() < 0">
+      @if (restantes() < 0) {
+        Te pasaste por {{ -restantes() }} caracteres.
+      } @else {
+        Quedan {{ restantes() }} caracteres.
+      }
+    </p>
+
+    <!-- Trampa para bots: invisible para una persona. -->
+    <div class="trampa" aria-hidden="true">
+      <label for="website">No completes este campo</label>
+      <input id="website" type="text" formControlName="website" tabindex="-1" autocomplete="off" />
+    </div>
+  </div>
+
+  <div class="card-footer d-flex justify-content-end gap-2 bg-body-tertiary">
+    <button type="button" class="btn btn-outline-secondary" (click)="cancelar()">Cancelar</button>
+    <button type="submit" class="btn btn-primary" [disabled]="enviando() || seExcedio()">
+      Publicar
+    </button>
+  </div>
+</form>

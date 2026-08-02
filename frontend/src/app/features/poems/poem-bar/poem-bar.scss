@@ -1,0 +1,95 @@
+@import 'styles/paleta';
+
+.franja {
+  position: fixed;
+  inset-inline: 0;
+  // `top` lo pone el componente, medido según la cabecera del sitio.
+  z-index: 19; // justo debajo de la cabecera, que usa 20
+  background-color: rgba($fondo, 0.94);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid $borde;
+
+  // Oculta y desplazada hacia arriba hasta que se pasa la cabecera.
+  opacity: 0;
+  transform: translateY(-100%);
+  pointer-events: none;
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+.franja--visible {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+}
+
+.franja__interior {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding-block: 0.6rem;
+}
+
+.franja__titulo {
+  flex: 1;
+  min-width: 0;
+  text-align: center;
+  font-size: 1.05rem;
+  color: $texto;
+  // Un título largo se corta en vez de romper la franja en dos líneas.
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  &:hover {
+    text-decoration: none;
+    color: $acento-fuerte;
+  }
+}
+
+.franja__paso {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  color: $texto-suave;
+  font-size: 1.1rem;
+  line-height: 1;
+  transition:
+    background-color 0.25s ease,
+    color 0.25s ease;
+
+  &:hover {
+    background-color: $superficie;
+    color: $texto;
+    text-decoration: none;
+  }
+}
+
+// Ocupa el lugar del que falta, para que el título siga centrado.
+.franja__paso--vacio {
+  pointer-events: none;
+}
+
+.franja__progreso {
+  height: 2px;
+  background-color: transparent;
+
+  span {
+    display: block;
+    height: 100%;
+    background-color: $texto;
+    transition: width 0.08s linear;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .franja,
+  .franja__paso,
+  .franja__progreso span {
+    transition: none;
+  }
+}

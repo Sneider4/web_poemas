@@ -1,0 +1,88 @@
+<div class="min-vh-100 d-flex align-items-center justify-content-center p-4">
+  <form
+    class="card shadow-sm p-4 w-100"
+    style="max-width: 26rem"
+    [formGroup]="formulario"
+    (ngSubmit)="recuperar()"
+  >
+    <h1 class="titulo-poetico fs-3 text-center mb-1">Recuperar el acceso</h1>
+    <p class="small text-body-secondary text-center mb-4">
+      Usá el código que guardaste para poner una contraseña nueva.
+    </p>
+
+    <div class="mb-3">
+      <label class="form-label" for="usuario">Usuario</label>
+      <input
+        id="usuario"
+        class="form-control"
+        [class.is-invalid]="
+          formulario.controls.username.touched && formulario.controls.username.invalid
+        "
+        type="text"
+        formControlName="username"
+        autocomplete="username"
+        autocapitalize="none"
+        spellcheck="false"
+      />
+      <div class="invalid-feedback">Escribí tu usuario.</div>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label" for="codigo">Código de recuperación</label>
+      <input
+        id="codigo"
+        class="form-control campo-codigo"
+        [class.is-invalid]="
+          formulario.controls.codigo.touched && formulario.controls.codigo.invalid
+        "
+        type="text"
+        formControlName="codigo"
+        placeholder="XXXX-XXXX-XXXX-XXXX"
+        autocomplete="off"
+        autocapitalize="characters"
+        spellcheck="false"
+      />
+      <div class="invalid-feedback">Escribí el código.</div>
+      <div class="form-text">No importan las mayúsculas ni los guiones.</div>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label" for="nueva">Contraseña nueva</label>
+      <input
+        id="nueva"
+        class="form-control"
+        [class.is-invalid]="
+          formulario.controls.passwordNueva.touched && formulario.controls.passwordNueva.invalid
+        "
+        type="password"
+        formControlName="passwordNueva"
+        autocomplete="new-password"
+      />
+      <div class="invalid-feedback">Tiene que tener al menos 8 caracteres.</div>
+    </div>
+
+    <div class="mb-4">
+      <label class="form-label" for="repetir">Repetir la contraseña</label>
+      <input
+        id="repetir"
+        class="form-control"
+        type="password"
+        formControlName="repetir"
+        autocomplete="new-password"
+      />
+    </div>
+
+    <button type="submit" class="btn btn-primary w-100" [disabled]="enviando()">
+      @if (enviando()) {
+        <span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
+      }
+      {{ enviando() ? 'Verificando...' : 'Cambiar la contraseña' }}
+    </button>
+
+    <p class="small text-body-tertiary text-center mt-3 mb-0">
+      El código se usa una sola vez. Después vas a poder generar otro desde el panel.
+    </p>
+
+    <a routerLink="/admin/login" class="small text-center mt-3">Volver al acceso</a>
+  </form>
+</div>

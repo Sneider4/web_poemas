@@ -1,0 +1,25 @@
+// Superficie mínima para que el doble clic sobre el fondo del tablero
+// tenga dónde ocurrir aunque haya pocas publicaciones.
+.tablero {
+  min-height: 18rem;
+}
+
+// Botón flotante: Bootstrap no trae un FAB, así que se posiciona acá.
+.flotante {
+  right: clamp(1rem, 4vw, 2.5rem);
+  bottom: clamp(1rem, 4vw, 2.5rem);
+  z-index: 1030;
+  width: 3.25rem;
+  height: 3.25rem;
+  transition: transform 0.2s ease;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .flotante:hover {
+    transform: none;
+  }
+}

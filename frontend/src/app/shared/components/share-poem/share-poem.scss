@@ -1,0 +1,5 @@
+// El ancho del botón de copiar cambia al pasar a "Enlace copiado";
+// este mínimo evita que los botones de al lado salten de posición.
+.btn {
+  min-width: 9.5rem;
+}

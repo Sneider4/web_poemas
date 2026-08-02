@@ -1,0 +1,18 @@
+<a
+  [routerLink]="['/poemas', poema().slug]"
+  class="pieza fondo-foto realce d-flex flex-column justify-content-end text-decoration-none"
+  [style.background-image]="fondo()"
+>
+  <span class="velo velo--suave"></span>
+
+  <span class="pieza__texto position-relative p-4">
+    <!-- Sin `d-block`: su `display: block !important` pisaría el
+         `-webkit-box` que necesita el recorte por líneas. -->
+    @if (adelanto()) {
+      <span class="pieza__adelanto texto-poema mb-3">{{ adelanto() }}</span>
+    }
+
+    <span class="pieza__titulo titulo-poetico d-block">{{ poema().title }}</span>
+    <span class="eyebrow d-block mt-1">Leer</span>
+  </span>
+</a>

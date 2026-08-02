@@ -1,0 +1,31 @@
+# Dependencias
+node_modules/
+
+# Variables de entorno
+.env
+.env.local
+*.env
+!.env.example
+
+# Builds
+dist/
+build/
+.angular/
+*.tsbuildinfo
+.vercel/
+
+# Logs
+*.log
+npm-debug.log*
+logs/
+
+# Editor / SO
+.DS_Store
+Thumbs.db
+*.swp
+
+# Cobertura de tests
+coverage/
+
+# Imagenes subidas desde el panel
+backend/uploads/

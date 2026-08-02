@@ -1,0 +1,46 @@
+<div class="min-vh-100 d-flex align-items-center justify-content-center p-4">
+  <form class="card shadow-sm p-4 text-center w-100" style="max-width: 24rem" [formGroup]="formulario" (ngSubmit)="ingresar()">
+    <h1 class="titulo-poetico fs-3 mb-1">Panel de Santiago</h1>
+    <p class="small text-body-tertiary mb-4">Ingresá para administrar tus poemas.</p>
+
+    <div class="mb-3 text-start">
+      <label class="form-label" for="usuario">Usuario</label>
+      <input
+        id="usuario"
+        class="form-control"
+        [class.is-invalid]="
+          formulario.controls.username.touched && formulario.controls.username.invalid
+        "
+        type="text"
+        formControlName="username"
+        autocomplete="username"
+        autocapitalize="none"
+        spellcheck="false"
+      />
+      <div class="invalid-feedback">Escribí tu usuario.</div>
+    </div>
+
+    <div class="mb-4 text-start">
+      <label class="form-label" for="password">Contraseña</label>
+      <input
+        id="password"
+        class="form-control"
+        [class.is-invalid]="formulario.controls.password.touched && formulario.controls.password.invalid"
+        type="password"
+        formControlName="password"
+        autocomplete="current-password"
+      />
+      <div class="invalid-feedback">Escribí tu contraseña.</div>
+    </div>
+
+    <button type="submit" class="btn btn-primary w-100" [disabled]="enviando()">
+      @if (enviando()) {
+        <span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
+      }
+      {{ enviando() ? 'Ingresando...' : 'Ingresar' }}
+    </button>
+
+    <a routerLink="/admin/recuperar" class="small mt-4">Olvidé mi contraseña</a>
+    <a routerLink="/" class="small text-body-tertiary mt-2">Volver al sitio</a>
+  </form>
+</div>

@@ -1,0 +1,143 @@
+@import 'styles/paleta';
+
+// --- Hero ---
+// Ocupa casi toda la pantalla al entrar, descontando la cabecera fija.
+.hero {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - 5rem);
+  padding: 6rem 0 8rem;
+  // El zoom de la foto no debe asomarse fuera de la sección.
+  overflow: hidden;
+}
+
+// Capa de la foto, separada para animarla sin mover el texto.
+.hero__fondo {
+  position: absolute;
+  inset: 0;
+  animation: respirar 24s ease-in-out infinite alternate;
+}
+
+.hero__contenido {
+  position: relative; // por encima del velo
+  z-index: 1;
+}
+
+// Entrada escalonada: primero el antetítulo, después el verso,
+// la atribución y por último los botones.
+.hero__entra {
+  animation: entrar-suave 0.9s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+.hero__entra--2 {
+  animation-delay: 0.15s;
+}
+
+.hero__entra--3 {
+  animation-delay: 0.3s;
+}
+
+.hero__entra--4 {
+  animation-delay: 0.45s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero__fondo,
+  .hero__entra {
+    animation: none;
+  }
+}
+
+.hero__verso {
+  font-size: clamp(2rem, 6vw, 4rem);
+  line-height: 1.2;
+  // Los versos del gancho conservan su salto de línea original.
+  white-space: pre-line;
+  text-wrap: balance;
+}
+
+.hero__flecha {
+  position: absolute;
+  bottom: 2.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1;
+  font-size: 1.5rem;
+  color: $texto-suave;
+  animation: flotar 2.4s ease-in-out infinite;
+}
+
+@keyframes flotar {
+  0%,
+  100% {
+    transform: translate(-50%, 0);
+    opacity: 0.5;
+  }
+
+  50% {
+    transform: translate(-50%, 0.5rem);
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero__flecha {
+    animation: none;
+  }
+}
+
+// --- Vistazo a la comunidad ---
+// La portada solo muestra un asomo del tablero: se corta a una altura fija
+// y el final se desvanece, con el botón para entrar encima del degradado.
+.vistazo {
+  position: relative;
+  max-height: 26rem;
+  overflow: hidden;
+}
+
+.vistazo__difuminado {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  padding-bottom: 1.25rem;
+  // Alto suficiente para que el degradado tape el corte de la última tarjeta.
+  height: 9rem;
+  background: linear-gradient(
+    to bottom,
+    rgba($fondo-hundido, 0) 0%,
+    rgba($fondo-hundido, 0.85) 55%,
+    rgba($fondo-hundido, 1) 100%
+  );
+  // El degradado es decorativo: no debe bloquear el clic en las tarjetas.
+  pointer-events: none;
+}
+
+// El botón sí tiene que ser clicable.
+.vistazo__difuminado .btn {
+  pointer-events: auto;
+}
+
+// --- Manifiesto ---
+.manifiesto {
+  font-size: clamp(1.4rem, 3.5vw, 2.2rem);
+  line-height: 1.5;
+  text-wrap: balance;
+  // Comillas decorativas grandes, sin ocupar espacio en el flujo.
+  position: relative;
+
+  &::before {
+    content: '\201C';
+    position: absolute;
+    top: -1.5rem;
+    left: -1rem;
+    font-size: 5rem;
+    line-height: 1;
+    color: $borde;
+    pointer-events: none;
+  }
+}

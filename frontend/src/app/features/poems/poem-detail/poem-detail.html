@@ -1,0 +1,109 @@
+@if (cargando()) {
+  <div class="py-5">
+    <app-loading-spinner mensaje="Cargando el poema" />
+  </div>
+} @else if (poema(); as datos) {
+  <!-- Franja que recuerda qué poema se está leyendo, con el progreso
+       integrado, una vez que la cabecera grande queda arriba. -->
+  <app-poem-bar [poema]="datos" [anterior]="anterior()" [siguiente]="siguiente()" />
+
+  <!-- ============ Cabecera con imagen ============ -->
+  <header class="cabecera fondo-foto" [style.background-image]="fondo()">
+    <div class="velo"></div>
+
+    <div class="cabecera__contenido container text-center">
+      <h1 class="titulo-poetico mb-3 cabecera__entra">{{ datos.title }}</h1>
+      <time class="eyebrow cabecera__entra cabecera__entra--2" [attr.datetime]="datos.publishedAt">
+        {{ datos.publishedAt | date: 'd MMMM y' }}
+      </time>
+    </div>
+  </header>
+
+  <!-- ============ El poema ============ -->
+  <article class="container py-5" style="max-width: 38rem">
+    <!-- Se muestra como un solo bloque: el poema ahora puede llevar formato
+         y partirlo por estrofas rompería las etiquetas por la mitad.
+         `innerHTML` pasa por el sanitizador de Angular, y el backend ya
+         guardó solo las etiquetas de la lista blanca. -->
+    <div class="texto-poema fs-5 lh-lg" appReveal [innerHTML]="datos.body"></div>
+
+    <div class="mt-5 pt-4 border-top" appReveal>
+      <app-share-poem [poema]="datos" [autor]="autor()?.instagram || 'santiago_a_secas__'" />
+    </div>
+  </article>
+
+  <!-- ============ Seguir leyendo ============ -->
+  @if (anterior() || siguiente()) {
+    <nav class="seguir container pb-5" aria-label="Otros poemas">
+      <p class="eyebrow text-center mb-4">Seguir leyendo</p>
+
+      <div class="row g-4 justify-content-center">
+        @if (anterior(); as previo) {
+          <div class="col-12 col-md-6">
+            <a [routerLink]="['/poemas', previo.slug]" class="salto card h-100">
+              <div class="card-body d-flex flex-column gap-3">
+                <div class="d-flex align-items-center gap-3">
+                  <span
+                    class="salto__miniatura fondo-foto"
+                    [style.background-image]="fondoDe(previo)"
+                    aria-hidden="true"
+                  ></span>
+
+                  <span class="d-flex flex-column gap-1 min-w-0 flex-grow-1">
+                    <span class="eyebrow salto__guia">
+                      <span class="salto__flecha" aria-hidden="true">←</span> Anterior
+                    </span>
+                    <span class="salto__titulo titulo-poetico">{{ previo.title }}</span>
+                  </span>
+                </div>
+
+                @if (adelantoDe(previo); as versos) {
+                  <span class="salto__versos texto-poema">{{ versos }}</span>
+                }
+              </div>
+            </a>
+          </div>
+        }
+
+        @if (siguiente(); as proximo) {
+          <div class="col-12 col-md-6">
+            <a [routerLink]="['/poemas', proximo.slug]" class="salto salto--proximo card h-100">
+              <div class="card-body d-flex flex-column gap-3">
+                <div class="d-flex align-items-center gap-3">
+                  <span class="d-flex flex-column gap-1 min-w-0 flex-grow-1">
+                    <span class="eyebrow salto__guia">
+                      Siguiente <span class="salto__flecha" aria-hidden="true">→</span>
+                    </span>
+                    <span class="salto__titulo titulo-poetico">{{ proximo.title }}</span>
+                  </span>
+
+                  <span
+                    class="salto__miniatura fondo-foto"
+                    [style.background-image]="fondoDe(proximo)"
+                    aria-hidden="true"
+                  ></span>
+                </div>
+
+                @if (adelantoDe(proximo); as versos) {
+                  <span class="salto__versos texto-poema">{{ versos }}</span>
+                }
+              </div>
+            </a>
+          </div>
+        }
+      </div>
+
+      <div class="text-center mt-5">
+        <a routerLink="/poemas" class="btn btn-outline-light">Ver todos los poemas</a>
+      </div>
+    </nav>
+  }
+} @else if (noEncontrado()) {
+  <div class="container text-center py-5" style="max-width: 38rem">
+    <h1 class="titulo-poetico">Ese poema no existe</h1>
+    <p class="text-body-secondary">
+      Puede que aún no esté publicado o que el enlace esté mal escrito.
+    </p>
+    <a routerLink="/poemas" class="btn btn-outline-light">Ver todos los poemas</a>
+  </div>
+}

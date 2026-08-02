@@ -1,0 +1,69 @@
+<div class="mb-3">
+  @if (etiqueta()) {
+    <label class="form-label" [attr.for]="idCampo">{{ etiqueta() }}</label>
+  }
+
+  <div class="editor" [class.editor--inactivo]="deshabilitado()">
+    <!-- Barra de formato -->
+    <div class="editor__barra" role="toolbar" aria-label="Opciones de formato">
+      @for (accion of acciones; track accion.comando) {
+        <button
+          type="button"
+          class="editor__boton"
+          [class]="accion.clase"
+          [title]="accion.titulo"
+          [attr.aria-label]="accion.titulo"
+          [disabled]="deshabilitado()"
+          (click)="aplicar(accion.comando)"
+        >
+          {{ accion.etiqueta }}
+        </button>
+      }
+
+      <span class="editor__separador" aria-hidden="true"></span>
+
+      <button
+        type="button"
+        class="editor__boton"
+        title="Insertar enlace"
+        aria-label="Insertar enlace"
+        [disabled]="deshabilitado()"
+        (click)="insertarEnlace()"
+      >
+        🔗
+      </button>
+
+      <button
+        type="button"
+        class="editor__boton"
+        title="Quitar el formato"
+        aria-label="Quitar el formato"
+        [disabled]="deshabilitado()"
+        (click)="quitarFormato()"
+      >
+        ✕
+      </button>
+    </div>
+
+    <!-- Área de escritura -->
+    <div
+      #area
+      [id]="idCampo"
+      class="editor__area"
+      [class]="claseTexto()"
+      [style.min-height]="alto()"
+      [attr.contenteditable]="!deshabilitado()"
+      [attr.data-placeholder]="placeholder()"
+      [class.editor__area--vacia]="vacio()"
+      role="textbox"
+      aria-multiline="true"
+      (input)="alEscribir()"
+      (blur)="alSalir()"
+      (paste)="alPegar($event)"
+    ></div>
+  </div>
+
+  @if (ayuda()) {
+    <div class="form-text">{{ ayuda() }}</div>
+  }
+</div>

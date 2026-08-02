@@ -1,0 +1,52 @@
+<div
+  class="franja"
+  [class.franja--visible]="visible()"
+  [style.top.px]="alturaCabecera()"
+  [attr.aria-hidden]="!visible()"
+>
+  <div class="container franja__interior">
+    <!-- Poema anterior -->
+    @if (anterior(); as previo) {
+      <a
+        [routerLink]="['/poemas', previo.slug]"
+        class="franja__paso"
+        [attr.aria-label]="'Poema anterior: ' + previo.title"
+        [title]="previo.title"
+      >
+        <span aria-hidden="true">←</span>
+      </a>
+    } @else {
+      <span class="franja__paso franja__paso--vacio" aria-hidden="true"></span>
+    }
+
+    <a [routerLink]="['/poemas', poema().slug]" class="franja__titulo titulo-poetico">
+      {{ poema().title }}
+    </a>
+
+    <!-- Poema siguiente -->
+    @if (siguiente(); as proximo) {
+      <a
+        [routerLink]="['/poemas', proximo.slug]"
+        class="franja__paso"
+        [attr.aria-label]="'Poema siguiente: ' + proximo.title"
+        [title]="proximo.title"
+      >
+        <span aria-hidden="true">→</span>
+      </a>
+    } @else {
+      <span class="franja__paso franja__paso--vacio" aria-hidden="true"></span>
+    }
+  </div>
+
+  <!-- La barra de progreso vive en el borde inferior de la franja. -->
+  <div
+    class="franja__progreso"
+    role="progressbar"
+    aria-label="Progreso de lectura"
+    [attr.aria-valuenow]="Math.round(progreso())"
+    aria-valuemin="0"
+    aria-valuemax="100"
+  >
+    <span [style.width.%]="progreso()"></span>
+  </div>
+</div>

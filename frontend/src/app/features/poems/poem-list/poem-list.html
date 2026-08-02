@@ -1,0 +1,67 @@
+<div class="container py-5">
+  <header class="border-bottom pb-4 mb-4">
+    <h1 class="titulo-poetico mb-2">Poemas</h1>
+    <p class="text-body-secondary mb-0">Acá una lista de todos mis poemas hasta ahora.</p>
+  </header>
+
+  <!-- Buscador -->
+  <div class="row justify-content-between align-items-center g-3 mb-4">
+    <div class="col-12 col-md-6 col-lg-5">
+      <div class="input-group">
+        <span class="input-group-text" aria-hidden="true">⌕</span>
+        <input
+          type="search"
+          class="form-control"
+          placeholder="Buscar un poema por su título"
+          aria-label="Buscar un poema por su título"
+          [value]="busqueda()"
+          (input)="alBuscar($event)"
+        />
+        @if (buscando()) {
+          <button type="button" class="btn btn-outline-secondary" (click)="limpiar()">
+            Limpiar
+          </button>
+        }
+      </div>
+    </div>
+
+    <div class="col-12 col-md-auto">
+      <p class="small text-body-secondary mb-0">
+        @if (buscando()) {
+          {{ resultados().length }}
+          {{ resultados().length === 1 ? 'poema encontrado' : 'poemas encontrados' }}
+        } @else {
+          {{ poemas().length }} en total
+        }
+      </p>
+    </div>
+  </div>
+
+  @if (cargando()) {
+    <app-loading-spinner mensaje="Cargando poemas" />
+  } @else if (resultados().length > 0) {
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-4">
+      @for (poema of resultados(); track poema.id; let i = $index) {
+        <!-- Escalonado por fila: el retardo se reinicia cada 3 tarjetas
+             para que las de más abajo no esperen de más. -->
+        <div class="col" appReveal [revealDelay]="(i % 3) * 90">
+          <app-poem-card [poema]="poema" />
+        </div>
+      }
+    </div>
+  } @else if (buscando()) {
+    <app-empty-state
+      titulo="No encontramos ese poema"
+      [detalle]="'Ningún título contiene «' + busqueda().trim() + '».'"
+    >
+      <button type="button" class="btn btn-outline-light mt-3" (click)="limpiar()">
+        Ver todos los poemas
+      </button>
+    </app-empty-state>
+  } @else {
+    <app-empty-state
+      titulo="Todavía no hay poemas publicados"
+      detalle="Ya están cargados como borradores; aparecerán acá al publicarlos."
+    />
+  }
+</div>

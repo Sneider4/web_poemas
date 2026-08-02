@@ -1,0 +1,18 @@
+// El CDK monta el diálogo fuera del `.modal` de Bootstrap, así que el
+// ancho y el desplazamiento se definen acá en vez de con `.modal-dialog`.
+:host {
+  display: block;
+  width: min(92vw, 32rem);
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+// Honeypot: fuera de la vista pero sin `display:none`,
+// que algunos bots detectan y evitan.
+.trampa {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}

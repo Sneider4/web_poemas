@@ -1,0 +1,79 @@
+@import 'styles/paleta';
+
+// El CDK monta el diálogo fuera de un `.modal`, así que el ancho y el
+// desplazamiento se definen acá.
+:host {
+  display: block;
+  width: min(92vw, 24rem);
+  max-height: 92vh;
+  overflow-y: auto;
+}
+
+// El recuadro conserva la proporción del formato elegido, así se ve el
+// encuadre real y no una versión estirada.
+.previa {
+  position: relative;
+  display: grid;
+  place-items: center;
+  max-height: 58vh;
+  margin-inline: auto;
+  background-color: $fondo-hundido;
+  border: 1px solid $borde;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  // Evita que el navegador tome el arrastre vertical como scroll de página.
+  touch-action: none;
+  user-select: none;
+}
+
+.previa--movible {
+  cursor: grab;
+
+  &:active {
+    cursor: grabbing;
+  }
+}
+
+.previa__imagen {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  // Sin esto el navegador ofrece arrastrar la imagen y corta el gesto.
+  pointer-events: none;
+}
+
+.previa__capa {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: $texto-suave;
+}
+
+// Pista de que el recuadro se puede mover. Se desvanece al arrastrar
+// para no taparlo.
+.previa__pista {
+  position: absolute;
+  bottom: 0.6rem;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 0.15rem 0.6rem;
+  border-radius: 999px;
+  background-color: rgba($charcoal-noir, 0.75);
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: $texto-suave;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.previa:active .previa__pista {
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .previa__pista {
+    transition: none;
+  }
+}

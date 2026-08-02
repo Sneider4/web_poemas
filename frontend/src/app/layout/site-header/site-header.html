@@ -1,0 +1,37 @@
+<nav class="navbar navbar-expand-md sticky-top border-bottom cabecera">
+  <div class="container">
+    <a routerLink="/" class="navbar-brand d-flex flex-column lh-sm sin-subrayado" (click)="cerrarMenu()">
+      <span class="titulo-poetico fs-4 text-body-emphasis">santiago a secas</span>
+      <span class="eyebrow">poemas de un solitario</span>
+    </a>
+
+    <button
+      type="button"
+      class="navbar-toggler"
+      [attr.aria-expanded]="menuAbierto()"
+      aria-controls="menu-principal"
+      aria-label="Abrir menú"
+      (click)="alternarMenu()"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div id="menu-principal" class="collapse navbar-collapse" [class.show]="menuAbierto()">
+      <ul class="navbar-nav ms-auto mb-2 mb-md-0 gap-md-3">
+        @for (enlace of enlaces; track enlace.ruta) {
+          <li class="nav-item">
+            <a
+              [routerLink]="enlace.ruta"
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: enlace.exacto ?? false }"
+              class="nav-link"
+              (click)="cerrarMenu()"
+            >
+              {{ enlace.etiqueta }}
+            </a>
+          </li>
+        }
+      </ul>
+    </div>
+  </div>
+</nav>

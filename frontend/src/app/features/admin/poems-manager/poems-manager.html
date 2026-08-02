@@ -1,0 +1,84 @@
+<header class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+  <div>
+    <h1 class="fs-3 mb-0">Poemas</h1>
+    <p class="small text-body-tertiary mb-0">
+      {{ poemas().length }} en total &middot; {{ publicados() }} publicados
+    </p>
+  </div>
+
+  <a routerLink="/admin/poemas/nuevo" class="btn btn-primary">Nuevo poema</a>
+</header>
+
+@if (cargando() && poemas().length === 0) {
+  <app-loading-spinner mensaje="Cargando poemas" />
+} @else {
+  <div class="card">
+    <div class="table-responsive">
+      <table class="table table-hover align-middle mb-0">
+        <thead>
+          <tr class="small text-uppercase text-body-tertiary">
+            <th scope="col">Título</th>
+            <th scope="col">Estado</th>
+            <th scope="col">Portada</th>
+            <th scope="col"><span class="visually-hidden">Acciones</span></th>
+          </tr>
+        </thead>
+
+        <tbody>
+          @for (poema of poemas(); track poema.id) {
+            <tr>
+              <td>
+                <span class="d-block">{{ poema.title }}</span>
+                <span class="d-block small text-body-tertiary">/poemas/{{ poema.slug }}</span>
+                @if (!poema.body.trim()) {
+                  <span class="badge text-bg-warning mt-1">sin texto todavía</span>
+                }
+              </td>
+
+              <td>
+                <button
+                  type="button"
+                  class="btn btn-sm rounded-pill"
+                  [class]="poema.published ? 'btn-primary' : 'btn-outline-secondary'"
+                  (click)="alternarPublicado(poema)"
+                >
+                  {{ poema.published ? 'Publicado' : 'Borrador' }}
+                </button>
+              </td>
+
+              <td>
+                <button
+                  type="button"
+                  class="btn btn-sm rounded-pill"
+                  [class]="poema.featured ? 'btn-primary' : 'btn-outline-secondary'"
+                  (click)="alternarDestacado(poema)"
+                >
+                  {{ poema.featured ? 'Destacado' : 'Normal' }}
+                </button>
+              </td>
+
+              <td class="text-nowrap">
+                <a [routerLink]="['/admin/poemas', poema.id, 'editar']" class="btn btn-link btn-sm">
+                  Editar
+                </a>
+                <button
+                  type="button"
+                  class="btn btn-link btn-sm text-danger"
+                  (click)="eliminar(poema)"
+                >
+                  Eliminar
+                </button>
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="4" class="text-center text-body-tertiary py-5">
+                Todavía no hay poemas cargados.
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+}

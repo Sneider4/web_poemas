@@ -1,0 +1,16 @@
+@import 'styles/paleta';
+
+// El código se muestra grande y monoespaciado: se copia a mano a menudo
+// y los caracteres tienen que distinguirse sin dudas.
+.codigo {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: clamp(1.1rem, 4vw, 1.6rem);
+  letter-spacing: 0.12em;
+  color: $texto;
+  padding: 1rem;
+  border: 1px dashed $borde;
+  border-radius: 0.5rem;
+  background-color: $fondo-hundido;
+  overflow-wrap: anywhere;
+  user-select: all;
+}

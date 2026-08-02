@@ -1,0 +1,6 @@
+// El formulario no lleva ancho máximo: se reparte en columnas y usa
+// toda la pantalla. Acá solo la altura del campo de biografía.
+.campo-bio {
+  min-height: 22rem;
+  line-height: 1.8;
+}

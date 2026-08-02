@@ -1,0 +1,19 @@
+@media (width >= 768px) {
+  .panel-lateral {
+    width: 14rem;
+    flex-shrink: 0;
+
+    // Se queda fijo ocupando solo el alto de la pantalla. Sin esto el
+    // <aside> crece con el contenido y "Cerrar sesión", que va al fondo,
+    // quedaba al final de una página larga en vez de siempre a la vista.
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    // En un contenedor flex el `stretch` por defecto estiraría la barra
+    // al alto del contenido y dejaría al sticky sin margen para actuar.
+    align-self: flex-start;
+    // Si alguna vez el menú no entra (pantalla muy baja), se desplaza
+    // dentro de la barra en lugar de desbordarse.
+    overflow-y: auto;
+  }
+}
